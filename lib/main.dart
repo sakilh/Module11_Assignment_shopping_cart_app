@@ -7,7 +7,7 @@ class Product {
   double price;
   int quantity;
 
-  Product({required this.name, required this.color, required this.size, required this.price, this.quantity = 0});
+  Product({required this.name, required this.color, required this.size, required this.price, this.quantity = 1});
 
   double get totalPrice => price * quantity;
 
