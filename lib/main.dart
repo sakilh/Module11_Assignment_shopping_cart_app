@@ -7,7 +7,13 @@ class Product {
   double price;
   int quantity;
 
-  Product({required this.name, required this.color, required this.size, required this.price, this.quantity = 1});
+  Product({
+    required this.name,
+    required this.color,
+    required this.size,
+    required this.price,
+    this.quantity = 1, // Set initial quantity to 1
+  });
 
   double get totalPrice => price * quantity;
 
@@ -65,6 +71,26 @@ class _ProductListState extends State<ProductList> {
     );
   }
 
+  void _showCongratulationsDialog(Product product) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Congratulations!'),
+          content: Text('You have added\n5\n${product.name} on your bag!'),
+          actions: [
+            TextButton(
+              child: Text('OKAY'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _buildProductCard(Product product) {
     return Card(
       child: Padding(
@@ -87,14 +113,14 @@ class _ProductListState extends State<ProductList> {
                 children: [
                   Text(product.name),
                   Text('Color: ${product.color}, Size: ${product.size}'),
-                  Text('Price: ${product.initialPrice}'),  // Display initial price
+                  Text('Price: ${product.initialPrice}'), // Display initial price
                   Row(
                     children: [
                       IconButton(
                         icon: Icon(Icons.remove),
                         onPressed: () {
                           setState(() {
-                            if (product.quantity > 0) {
+                            if (product.quantity > 1) {
                               product.quantity--;
                             }
                           });
@@ -105,7 +131,12 @@ class _ProductListState extends State<ProductList> {
                         icon: Icon(Icons.add),
                         onPressed: () {
                           setState(() {
-                            product.quantity++;
+                            if (product.quantity < 5) {
+                              product.quantity++;
+                            }
+                            if (product.quantity == 5) {
+                              _showCongratulationsDialog(product);
+                            }
                           });
                         },
                       ),
